@@ -2,12 +2,13 @@
 
 module Main where
 
-import System.IO (hFlush, stdout)
+import System.IO (hFlush, stdout, openFile, hClose, IOMode(..), hGetContents, hPutStr)
 import System.Directory (doesFileExist)
 import Data.List (sortOn, intercalate)
 import Data.Maybe (fromMaybe)
 import Data.Time (getCurrentTime, utctDay, Day)
 import Text.Read (readMaybe)
+import Control.Exception (bracket)
 
 -- | Priority levels for tasks, with predefined levels High, Medium, and Low.
 data Priority = High | Medium | Low deriving (Eq, Ord, Read, Show)
@@ -38,14 +39,23 @@ loadOrCreateFile = do
     if not fileExists then writeFile filePath "" else return ()
 
 -- | Loads tasks from the file into memory as a list of Task objects.
+-- Uses strict I/O pattern to ensure file is properly closed
 loadTasks :: IO [Task]
-loadTasks = do
-    contents <- readFile filePath
-    return $ map read (lines contents)
+loadTasks = bracket
+    (openFile filePath ReadMode)
+    hClose
+    (\handle -> do
+        contents <- hGetContents handle
+        let tasks = map read (lines contents)
+        length tasks `seq` return tasks)  -- Force evaluation to ensure file is read completely
 
--- | Saves a list of Task objects to the file persistently.
+-- Saves a list of Task objects to the file persistently.
+-- Uses bracket pattern to ensure proper file handling  
 saveTasks :: [Task] -> IO ()
-saveTasks tasks = writeFile filePath (unlines $ map show tasks)
+saveTasks tasks = bracket
+    (openFile filePath WriteMode)
+    hClose
+    (\handle -> hPutStr handle (unlines $ map show tasks))
 
 -- | Main menu loop offering task management options to the user.
 mainMenu :: IO ()
@@ -169,4 +179,3 @@ formatTask (Task tid desc comp prio due) =
     show tid ++ ". " ++ desc ++ " [Priority: " ++ show prio ++ "]" ++
     (if comp then " [Completed]" else "") ++
     maybe "" (\d -> " [Due: " ++ show d ++ "]") due
-
