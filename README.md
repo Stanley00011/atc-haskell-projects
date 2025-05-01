@@ -1,36 +1,90 @@
-# ATC Haskell Projects
-Fork this repository - each branch is a different project
+# Project 1: Retrieval-Augmented Generation (RAG) Web App
 
-## Instructions for Completing and Submitting Your Project
+## How to Run the Application
 
-1. **IMPORTANT: Fork the Project**
-   - Click the "Fork" button at the top-right of the main page of this repository to create your own copy of the repository.
-   - **Make sure you deselect the "Copy the main branch only" option** so that all projects are copied to the forked repository.
+TODO
 
-3. **Ensure You Clone All Branches**
-   - Use the following command to clone all branches:
-     ```bash
-     git clone --no-single-branch <your-forked-repository-url>
-     ```
 
-4. **Complete the Project**
-   - Each branch in this repository has a separate project for you to complete. Checkout the branch to get started
-     ```bash
-     git branch -a
-     git checkout 1-todo-manager
-     ```
-   - Make your changes and implement the required features.
-   - Be sure to commit your changes frequently and push them to your forked repository.
+## High-Level Description
 
-6. **Add 'rhemsuda' and 'augyg' as Watchers**
-   - Once you are done with your changes, go to your forked repository on GitHub.
-   - Navigate to the **Settings** tab.
-   - Under **Collaborators and teams**, add the following users as watchers:
-     - `rhemsuda`
-     - `augyg`
+This project implements a Retrieval-Augmented Generation (RAG) web application that allows users to ask natural language questions over a custom corpus of documents. The system retrieves the most relevant document chunks using semantic search and then feeds them into a large language model to generate contextual answers. The goal is to build an end-to-end, scalable system that demonstrates your ability to integrate modern NLP models with backend infrastructure and front-end usability.
 
-7. **Send Us a Message**
-   - After adding the watchers and ensuring everything is pushed to the repository, send us a message to indicate that you have finished the project.
 
-8. **Project Submission Confirmation**
-   - Once we receive your message, we will review the repository and notify you of any feedback or final approval.
+## Software Requirements
+
+### Basic Functionality:
+- The system must allow users to ask natural language questions over a provided corpus (e.g., markdown files, PDFs, or scraped data).
+- The system must retrieve relevant document chunks and pass them into a language model to generate an answer.
+- Returned answers must include source citation metadata (e.g., titles or links).
+
+### Backend:
+- Uses an embedding model to vectorize documents (e.g., OpenAI, HuggingFace, or SentenceTransformers).
+- Stores vectors in a vector store (e.g., FAISS, Weaviate, Qdrant).
+- Uses a language model (e.g., OpenAI GPT, Mistral, or LLaMA) to generate final answers.
+- Backend must expose an API endpoint that takes in a query and returns an answer.
+
+### Frontend:
+- A simple React/Vue/HTML interface that allows users to enter a query and view the response.
+- Responses must be displayed in a readable format with citation metadata.
+
+### Deployment:
+- The application must run in a containerized environment (e.g., Docker Compose or Kubernetes).
+- Environment variables must be used for secrets (e.g., API keys).
+- Logging and error handling should be included.
+
+### Optional Advanced Features:
+- Real-time streaming responses (via Server-Sent Events or WebSockets).
+- Multi-turn conversation support with memory.
+- Support for multiple corpora and corpus selection.
+- Query re-ranking or hybrid search (BM25 + embeddings).
+
+## Acceptance Criteria:
+
+### Functionality:
+- User can input a natural language question and receive an answer with sources.
+- Corpus must be indexed and searchable via embedding vectors.
+- Language model outputs are relevant and accurate.
+
+### Usability:
+- The UI should be easy to use and responsive.
+- Answers should include links or labels for sources.
+
+### Code Quality:
+- The backend must be modular and well-documented.
+- Use of configuration files (e.g., `.env`, YAML) for environment setup.
+- Logging should capture relevant events and errors.
+
+### Deployment:
+- App can be deployed locally using Docker.
+- Documentation should describe how to deploy and test the system.
+
+## Rubric:
+
+### Basic Functionality (40 points):
+- Query input and answer display (10 points)
+- Embedding-based document retrieval (10 points)
+- LLM integration for generation (10 points)
+- Source citation in output (10 points)
+
+### Backend Engineering (20 points):
+- Vector store integration (10 points)
+- RESTful API or endpoint (10 points)
+
+### Frontend/User Interface (10 points):
+- Clean query input/output UI (5 points)
+- Citation display clarity (5 points)
+
+### Deployment and Infrastructure (20 points):
+- Dockerization and container setup (10 points)
+- Use of environment variables and config (10 points)
+
+### Code Quality and Documentation (10 points):
+- Modular, readable code and inline comments (5 points)
+- Clear README with setup and usage instructions (5 points)
+
+### Advanced Features (Optional - 20 points):
+- Streaming responses (10 points)
+- Multi-turn memory or hybrid search (10 points)
+
+**Total: 120 points (100 if advanced features are not implemented)**
+
